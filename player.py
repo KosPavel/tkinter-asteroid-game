@@ -34,6 +34,7 @@ class Player():
         Below we are calculating ship form as triangle. Each point
         calculated using angle phi for future simple realization of rotation.
         '''
+
     def shape(self):
         shape = [
         self.position_x + self.SIZE_CONST * math.cos(math.radians(self.phi)),

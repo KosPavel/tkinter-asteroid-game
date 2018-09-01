@@ -7,14 +7,6 @@ root = tkinter.Tk()
 player = Player(root)
 game = Game(root)
 game.create_objects(player)
-# game.canvas.after(30, game.update(player))
+game.update()
+
 root.mainloop()
-
-
-
-# ship = game.canvas.create_polygon(player.shape,
-#                              outline = player.outline,
-#                              fill = player.fill)
-# game.canvas.pack()
-# game.canvas.after(30, game.update(player, ship))
-# root.mainloop()

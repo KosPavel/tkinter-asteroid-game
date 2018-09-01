@@ -4,28 +4,37 @@ class Game():
 
     def __init__(self, root):
         self.canvas = tkinter.Canvas(root, height = 800, width = 800, bg = 'white')
-        self.tags = [] #painted objects on canvas
+        self.objectsIDs = [] #painted objects on canvas
+        self.instances = [] #all instances
 
-    def create_objects(*instances):
+    def create_objects(self, *instances):
         '''
         here we are creating painted objects on canvas for the first time
         '''
         for i in instances:
             shape = i.shape()
-            ship = self.canvas.create_polygon(shape, outline = i.outline,
-                                      fill = i.fill)
-            self.tags.append(ship)
-            print(self.tags)
+            ship = self.canvas.create_polygon(shape,
+                                             outline = i.outline,
+                                             fill = i.fill)
+            self.objectsIDs.append(ship) #list of drew objects
+            self.instances.append(i) #list of instances for using their methods
+            print(self.objectsIDs)
+            print(self.instances)
         self.canvas.pack()
 
-    def update(self, *instances):
+    def update(self):
         '''
         getting shape coords from each instance, that should
-        be painted on canvas, then updating picture
+        be painted on canvas
         '''
-        current_tag = -1
-        for i in instances:
-            current_tag += 1
-            shape = i.shape()
-            self.canvas.coords(self.tags[current_tag], shape)
-            self.canvas.after(30, self.update)
+        new_shape = [] #list with LISTS of coordinates for each instance
+        for instance in self.instances:
+            new_shape.append(instance.shape())
+        '''
+        updating picture
+        '''
+        for current_ID in self.objectsIDs:
+            self.canvas.coords(self.objectsIDs[current_ID - 1],
+                              new_shape[current_ID - 1],
+                              )
+        self.canvas.after(10, self.update)
