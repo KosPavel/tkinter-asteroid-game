@@ -7,6 +7,8 @@ class Player():
     def __init__(self, root):
         self.position_x = settings.pos_x
         self.position_y = settings.pos_y
+        self.mouse_x = 0
+        self.mouse_y = 0
         self.phi = 270               #angle in degrees for ship rotation
         self.DELTA_PHI = 5
         self.SIZE_CONST = 15         #const for ship size regulation
@@ -29,6 +31,8 @@ class Player():
         root.bind('<s>',self.moveBackward)
         root.bind('<a>',self.rotateLeft)
         root.bind('<d>',self.rotateRight)
+        root.bind('<Motion>', self.mouseCoords)
+        root.bind('<Button-1>', self.shoot)
 
         '''
         Below we are calculating ship form as triangle. Each point
@@ -80,6 +84,13 @@ class Player():
             self.phi = 360
         print('Phi = ' + str(self.phi))
 
+    def mouseCoords(self, event):
+        self.mouse_x, self.mouse_y = event.x, event.y
+        print(str(self.mouse_x), ' ', str(self.mouse_y))
+
+    def shoot(self, event):
+        pass
+
     def direction(self): #calculation of second point of speed vector
         '''
         Here below a problem with 0 deg = 360 deg resolved, by comparing deltas
@@ -111,4 +122,3 @@ class Player():
         self.speed_vector = [vect_x, vect_y]
         self.position_x = self.speed_vector[0]
         self.position_y = self.speed_vector[1]
-        print('speed_vector = ' + str(self.speed_vector))
