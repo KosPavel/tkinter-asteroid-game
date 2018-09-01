@@ -6,7 +6,14 @@ from game import Game
 root = tkinter.Tk()
 player = Player(root)
 game = Game(root)
-game.create_objects(player)
+
+'''
+arguments below - instances should be drawn on canvas, must have
+shape() and direction() methods
+'''
+game.create_objects(player,
+                   )
+
 game.update()
 
 root.mainloop()
