@@ -2,17 +2,15 @@ import tkinter
 
 from player import Player
 from game import Game
+from asteroids import Asteroids
 
 root = tkinter.Tk()
 player = Player(root)
+asteroids = Asteroids(root)
 game = Game(root)
 
-'''
-arguments below - instances should be drawn on canvas, must have
-shape() and direction() methods
-'''
-game.create_objects(player,
-                   )
+game.create_player(player)
+game.create_asteroids(asteroids)
 
 game.update()
 
