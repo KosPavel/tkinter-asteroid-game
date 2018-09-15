@@ -1,4 +1,5 @@
 import tkinter
+import random
 
 import settings
 
@@ -12,50 +13,63 @@ class Game():
                                     width = self.width,
                                     bg = settings.background,
                                     )
-        self.objectsIDs = [] #painted objects on canvas
-        self.instances = [] #all instances
+        self.inst_player = [] #for instance methods
+        self.ship_ID = [] #ship ID (for coords updating)
 
-    def create_objects(self, *instances):
-        '''
-        here we are creating painted objects on canvas for the first time
-        '''
-        for i in instances:
-            shape = i.shape()
-            ship = self.canvas.create_polygon(shape,
-                                             outline = i.outline,
-                                             fill = i.fill)
-            self.objectsIDs.append(ship) #list of drew objects
-            self.instances.append(i) #list of instances for using their methods
-            print(self.objectsIDs)
-            print(self.instances)
+        self.inst_asteroids = [] #for instance methods
+        self.asteroids_ID = [] #asteroids ID (for coords updating)
+
+    def create_player(self, player):
+        shape = player.shape()
+        player_ship = self.canvas.create_polygon(shape,
+                                                outline = player.outline,
+                                                fill = player.fill)
+        self.ship_ID.append(player_ship)
+        self.inst_player.append(player)
         self.canvas.pack()
 
-    def borders(self):
-        ''' if object leaves field, it will teleport to the otherside '''
-        for instance in self.instances:
-            if instance.position_x >= self.width:
-                instance.position_x = 0
-            elif instance.position_x <= 0:
-                instance.position_x = self.width
-            if instance.position_y >= self.height:
-                instance.position_y = 0
-            elif instance.position_y <= 0:
-                instance.position_y = self.height
+    def create_asteroids(self, asteroids):
+        i = 0
+        while i < settings.max_asteroids:
+            shape = asteroids.shape(i)
+            asteroid = self.canvas.create_oval(
+                                              shape,
+                                              fill = random.choice(settings.colors),
+                                              outline = random.choice(settings.colors))
+            self.asteroids_ID.append(asteroid)
+            i += 1
+        self.inst_asteroids.append(asteroids)
+        self.canvas.pack()
 
     def update(self):
         '''
         getting shape coords from each instance, that should
         be painted on canvas
         '''
-        new_shape = [] #list with LISTS of coordinates for each instance
-        for instance in self.instances:
-            new_shape.append(instance.shape())
-            instance.direction()
+        new_player_coords = [] #list with LISTS of coordinates of player
+        for i in self.inst_player:
+            new_player_coords.append(i.shape())
+            i.direction()
+
+        new_asteroids_coords = [] #list with LISTS of coordinates of asteroids
+        for i in self.inst_asteroids:
+            k = 0
+            i.direction()
+            while k < settings.max_asteroids:
+                new_asteroids_coords.append(i.shape(k))
+                k += 1
         '''
         updating picture
         '''
-        for current_ID in self.objectsIDs:
-            self.canvas.coords(self.objectsIDs[current_ID - 1],
-                              new_shape[current_ID - 1])
-        self.borders()
+
+        z = 0
+        while z < len(new_player_coords):
+            self.canvas.coords(self.ship_ID[z], new_player_coords[z])
+            z += 1
+
+        z = 0
+        while z < len(new_asteroids_coords):
+            self.canvas.coords(self.asteroids_ID[z], new_asteroids_coords[z])
+            z += 1
+
         self.canvas.after(10, self.update)

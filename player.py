@@ -22,11 +22,6 @@ class Player():
         self.outline = 'red'
         self.fill = 'green'
 
-        '''
-        speed vector contains ship coordinates of the next tick
-        '''
-        self.speed_vector = [self.position_x, self.position_y]
-
         root.bind('<w>',self.moveForward)
         root.bind('<s>',self.moveBackward)
         root.bind('<a>',self.rotateLeft)
@@ -53,14 +48,10 @@ class Player():
     def moveForward(self, event):
         if self.movement_speed < self.MOVEMENT_SPEED_MAX:
             self.movement_speed += self.DELTA_MOVEMENT_SPEED
-        if (self.movement_speed != 0 and self.movement_speed > self.inercia):
-            self.inercia += self.DELTA_INERCIA
 
     def moveBackward(self, event):
         if self.movement_speed > self.MOVEMENT_SPEED_MIN:
             self.movement_speed -= self.DELTA_MOVEMENT_SPEED
-        if (self.movement_speed != 0 and self.movement_speed < self.inercia):
-            self.inercia -= self.DELTA_INERCIA
 
     def rotateLeft(self, event):
         if self.movement_speed >= 0:
@@ -71,7 +62,7 @@ class Player():
             self.phi = 360
         if self.phi > 360:
             self.phi = 0
-        print('Phi = ' + str(self.phi))
+        # print('Phi = ' + str(self.phi))
 
     def rotateRight(self, event):
         if self.movement_speed >= 0:
@@ -82,14 +73,27 @@ class Player():
             self.phi = 0
         if self.phi < 0:
             self.phi = 360
-        print('Phi = ' + str(self.phi))
+        # print('Phi = ' + str(self.phi))
 
     def mouseCoords(self, event):
         self.mouse_x, self.mouse_y = event.x, event.y
-        print(str(self.mouse_x), ' ', str(self.mouse_y))
+        # print(str(self.mouse_x), ' ', str(self.mouse_y))
 
     def shoot(self, event):
         pass
+
+    def borders(self):
+        '''
+        ship can't leave borders of gamefield
+        '''
+        if self.position_x >= settings.width:
+            self.position_x = 0
+        elif self.position_x <= 0:
+            self.position_x = settings.width
+        if self.position_y >= settings.height:
+            self.position_y = 0
+        elif self.position_y <= 0:
+            self.position_y = settings.height
 
     def direction(self): #calculation of second point of speed vector
         '''
@@ -117,8 +121,6 @@ class Player():
         elif ((math.fabs(self.phi - self.alpha) == 0) or (math.fabs(self.phi - self.alpha) == 360)):
             pass
 
-        vect_x = self.movement_speed * math.cos(math.radians(self.alpha)) + self.position_x
-        vect_y = self.movement_speed * math.sin(math.radians(self.alpha)) + self.position_y
-        self.speed_vector = [vect_x, vect_y]
-        self.position_x = self.speed_vector[0]
-        self.position_y = self.speed_vector[1]
+        self.position_x = self.movement_speed * math.cos(math.radians(self.alpha)) + self.position_x
+        self.position_y = self.movement_speed * math.sin(math.radians(self.alpha)) + self.position_y
+        self.borders()
