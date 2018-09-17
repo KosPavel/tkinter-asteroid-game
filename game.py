@@ -19,6 +19,8 @@ class Game():
         self.inst_asteroids = [] #for instance methods
         self.asteroids_ID = [] #asteroids ID (for coords updating)
 
+        self.collision = False
+
     def create_player(self, player):
         shape = player.shape()
         player_ship = self.canvas.create_polygon(shape,
@@ -40,6 +42,32 @@ class Game():
             i += 1
         self.inst_asteroids.append(asteroids)
         self.canvas.pack()
+
+    def collision_check(self):
+        if self.collision == True:
+            pass
+        else:
+            i = 0
+            while i < len(self.asteroids_ID):
+                if (self.canvas.coords(self.ship_ID)[0] >= self.canvas.coords(self.asteroids_ID[i])[0]) \
+                and (self.canvas.coords(self.ship_ID)[0] <= self.canvas.coords(self.asteroids_ID[i])[2]) \
+                and (self.canvas.coords(self.ship_ID)[1] >= self.canvas.coords(self.asteroids_ID[i])[1]) \
+                and (self.canvas.coords(self.ship_ID)[1] <= self.canvas.coords(self.asteroids_ID[i])[3]):
+                    self.collision = True
+                elif (self.canvas.coords(self.ship_ID)[2] >= self.canvas.coords(self.asteroids_ID[i])[0]) \
+                and (self.canvas.coords(self.ship_ID)[2] <= self.canvas.coords(self.asteroids_ID[i])[2]) \
+                and (self.canvas.coords(self.ship_ID)[3] >= self.canvas.coords(self.asteroids_ID[i])[1]) \
+                and (self.canvas.coords(self.ship_ID)[3] <= self.canvas.coords(self.asteroids_ID[i])[3]):
+                    self.collision = True
+                elif (self.canvas.coords(self.ship_ID)[4] >= self.canvas.coords(self.asteroids_ID[i])[0]) \
+                and (self.canvas.coords(self.ship_ID)[4] <= self.canvas.coords(self.asteroids_ID[i])[2]) \
+                and (self.canvas.coords(self.ship_ID)[5] >= self.canvas.coords(self.asteroids_ID[i])[1]) \
+                and (self.canvas.coords(self.ship_ID)[5] <= self.canvas.coords(self.asteroids_ID[i])[3]):
+                    self.collision = True
+                i += 1
+
+        # print(self.collision)
+        return self.collision
 
     def update(self):
         '''
@@ -71,5 +99,9 @@ class Game():
         while z < len(new_asteroids_coords):
             self.canvas.coords(self.asteroids_ID[z], new_asteroids_coords[z])
             z += 1
+
+        ''' check for collision '''
+
+        self.collision_check()
 
         self.canvas.after(10, self.update)
