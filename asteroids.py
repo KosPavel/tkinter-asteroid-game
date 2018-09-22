@@ -20,15 +20,6 @@ class Asteroids():
         self.asteroid_direction_angles = []
 
         self.fill()
-        # print('x_coords: ')
-        # print(self.x_coords)
-        # print('y_coords: ')
-        # print(self.y_coords)
-        # self.supply_asteroids()
-        # print('x_coords: ')
-        # print(self.x_coords)
-        # print('y_coords: ')
-        # print(self.y_coords)
 
     def fill(self):
         while len(self.x_coords) != self.MAX_ASTEROIDS:
@@ -53,18 +44,6 @@ class Asteroids():
                 self.asteroid_sizes[i] = 'x'
                 self.asteroid_speeds[i] = 'x'
                 self.asteroid_direction_angles[i] = 'x'
-            # if self.y_coords[i] >= settings.height:
-            #     self.x_coords[i] = 'x'
-            #     self.y_coords[i] = 'x'
-            #     self.asteroid_sizes[i] = 'x'
-            #     self.asteroid_speeds[i] = 'x'
-            #     self.asteroid_direction_angles[i] = 'x'
-            # elif self.y_coords[i] <= 0:
-            #     self.x_coords[i] = 'x'
-            #     self.y_coords[i] = 'x'
-            #     self.asteroid_sizes[i] = 'x'
-            #     self.asteroid_speeds[i] = 'x'
-            #     self.asteroid_direction_angles[i] = 'x'
             i += 1
 
     def supply_asteroids(self):

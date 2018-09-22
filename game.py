@@ -1,5 +1,6 @@
 import tkinter
 import random
+import time
 
 import settings
 
@@ -21,6 +22,11 @@ class Game():
 
         self.collision = False
 
+        self.attempt = 1
+        self.score = 0
+        self.max_score = 0
+        self.attempt_time = time.time()
+
     def create_player(self, player):
         shape = player.shape()
         player_ship = self.canvas.create_polygon(shape,
@@ -41,6 +47,10 @@ class Game():
             self.asteroids_ID.append(asteroid)
             i += 1
         self.inst_asteroids.append(asteroids)
+
+        self.canvas_score = self.canvas.create_text(self.width * (4/5), 10, text = ('Score: ' + str(self.score)))
+        self.canvas_max_score = self.canvas.create_text(self.width * (4/5), 20, text = ('Max score: ' + str(self.max_score)))
+        self.canvas_attempt = self.canvas.create_text(self.width * (4/5), 30, text = ('Attempt: ' + str(self.attempt)))
         self.canvas.pack()
 
     def collision_check(self):
@@ -66,8 +76,39 @@ class Game():
                     self.collision = True
                 i += 1
 
-        # print(self.collision)
         return self.collision
+
+    def show_score(self):
+
+        self.score = int(time.time() - self.attempt_time)
+        if self.score > self.max_score:
+            self.max_score = self.score
+        self.canvas.itemconfigure(self.canvas_score, text = ('Score: ' + str(self.score)))
+        self.canvas.itemconfigure(self.canvas_max_score, text = ('Max score: ' + str(self.max_score)))
+
+    def restart(self):
+
+        ''' if ship collides with asteroid, game will restart'''
+        if self.collision_check() == True:
+
+            for i in self.inst_player:
+                i.position_x = settings.pos_x
+                i.position_y = settings.pos_y
+                i.phi = 270
+                i.alpha = 270
+                i.movement_speed = 0
+            for i in self.inst_asteroids:
+                i.x_coords = []
+                i.y_coords = []
+                i.asteroid_sizes = []
+                i.asteroid_speeds = []
+                i.asteroid_direction_angles = []
+                i.fill()
+                i.supply_asteroids()
+            self.attempt_time = time.time()
+            self.attempt += 1
+            self.canvas.itemconfigure(self.canvas_attempt, text = ('Attempt: ' + str(self.attempt)))
+            self.collision = False
 
     def update(self):
         '''
@@ -102,6 +143,7 @@ class Game():
 
         ''' check for collision '''
 
-        self.collision_check()
+        self.show_score()
+        self.restart()
 
         self.canvas.after(10, self.update)

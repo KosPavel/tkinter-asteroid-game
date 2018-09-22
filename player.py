@@ -26,8 +26,8 @@ class Player():
         root.bind('<s>',self.moveBackward)
         root.bind('<a>',self.rotateLeft)
         root.bind('<d>',self.rotateRight)
-        root.bind('<Motion>', self.mouseCoords)
-        root.bind('<Button-1>', self.shoot)
+        # root.bind('<Motion>', self.mouseCoords)
+        # root.bind('<Button-1>', self.shoot)
 
         '''
         Below we are calculating ship form as triangle. Each point
@@ -62,7 +62,6 @@ class Player():
             self.phi = 360
         if self.phi > 360:
             self.phi = 0
-        # print('Phi = ' + str(self.phi))
 
     def rotateRight(self, event):
         if self.movement_speed >= 0:
@@ -73,14 +72,15 @@ class Player():
             self.phi = 0
         if self.phi < 0:
             self.phi = 360
-        # print('Phi = ' + str(self.phi))
 
-    def mouseCoords(self, event):
-        self.mouse_x, self.mouse_y = event.x, event.y
-        # print(str(self.mouse_x), ' ', str(self.mouse_y))
+    # def mouseCoords(self, event):
+    #     self.mouse_x, self.mouse_y = event.x, event.y
+        '''
+        can be useful later
+        '''
 
-    def shoot(self, event):
-        pass
+    # def shoot(self, event):
+    #     pass
 
     def borders(self):
         '''

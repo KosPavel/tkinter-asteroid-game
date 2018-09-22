@@ -14,6 +14,6 @@ min_size = 8
 max_size = 30
 min_speed = 5
 max_speed = 8
-max_asteroids = 30
+max_asteroids = 5
 colors = ['black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta']
 ''' </asteroids settings> '''
